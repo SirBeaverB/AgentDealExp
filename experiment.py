@@ -18,13 +18,16 @@ data_life = ["short", "medium", "long"]
 # history
 market = [0.3, 0.4, 0.5, 0.6, 0.7]
 
+# 4*3*3*3*5*2*2*2*2*2*2 = 34560
+
+
 
 def random_history_list() -> list:
     """
     Generate a random history list with integers.
     """
     history = []
-    for i in range(10):
+    for i in range(5):
         history.append(random.randint(1, 100) * 100)
     return history
 
@@ -84,9 +87,9 @@ for s_mpi in model_performance_improvement:
                                                 file.write("Dealing Process:\n")
                                                 file.write(log_2)
                                             print(f"Experiment {i} completed")
-                                            break
+                                            #break
                                         #break
-                                    break
+                                    #break
                                 break
                             break
                         break

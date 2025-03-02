@@ -17,7 +17,7 @@ class DealAgent(BaseAgent):
             Do not reapeat the price offered by the seller unless you agree with it.
             You are truly willing to reach a deal before the dealing rounds end.
             Here are some strategies to consider:
-            - Start with a lower price than your expected value to leave room for negotiation.
+            - Start with a lower price than your expected value.
             - Be prepared to adjust your price based on the seller's counteroffers.
             """
             },
@@ -29,7 +29,7 @@ class DealAgent(BaseAgent):
             Do not reapeat the price offered by the buyer unless you agree with it.
             You are truly willing to reach a deal before the dealing rounds end.
             Here are some strategies to consider:
-            - Start with a higher price than your expected value to leave room for negotiation.
+            - Start with a higher price than your expected value.
             - Be prepared to adjust your price based on the buyer's counteroffers.
             """
             }
@@ -43,11 +43,11 @@ class DealAgent(BaseAgent):
         Receive value from the valuing agent,
         and execute the deal.
         '''
-        buyer_expected_price = buyer_value.get("expected_price", {})
+        buyer_expected_price = buyer_value.get("price", {})
         buyer_reason = buyer_value.get("reason", {})
         buyer_confidence = buyer_value.get("confidence", {})
 
-        seller_expected_price = seller_value.get("expected_price", {})
+        seller_expected_price = seller_value.get("price", {})
         seller_reason = seller_value.get("reason", {})
         seller_confidence = seller_value.get("confidence", {})
 
@@ -57,14 +57,14 @@ class DealAgent(BaseAgent):
             if role["name"] == "Buyer":
                 context_additions = f"""
                 Consider the following additional context while dealing:
-                You expect the price to be: {buyer_expected_price} 
+                Your expected price is: {buyer_expected_price} 
                 This is because: {buyer_reason} 
                 Your confidence in this valuation is {buyer_confidence}.
                 """
             if role["name"] == "Seller":
                 context_additions = f"""
                 Consider the following additional context while dealing:
-                You expect the price to be: {seller_expected_price} 
+                Your expexted price is: {seller_expected_price} 
                 This is because: {seller_reason} 
                 Your confidence in this valuation is {seller_confidence}.
                 """
@@ -119,7 +119,7 @@ class DealAgent(BaseAgent):
                 - Consider accepting the offer if the other party’s price is no more than 100 $ different from yours.
                 - You can change your price from last round.
                 - If you agree with the other party's price, you can accept it by repeating the accepted price first.
-                - Keep it concise and deal-like. Use adjective-rich language and convey your confidence, which was offered to you previously.
+                - Keep it concise and deal-like. Be specific and use adjective-rich language and convey your confidence, which was offered to you previously.
                 - Remember that you have {self.max_rounds - round_num} rounds left.
                 """
 
@@ -160,9 +160,9 @@ class DealAgent(BaseAgent):
         '''
         # Extract the price from the response.
         # The price should be the first number found in the response.
-        match = re.search(r'\d{1,3}(?:,\d{3})*(?:\.\d+)?', response)
+        match = re.search(r'\d+(?:\.\d+)?', response)  #
         if match:
-            return float(match.group(0))
+            return float(match.group(0)) 
         else:
             raise ValueError("Price not found in response.")
 
@@ -178,7 +178,7 @@ class DealAgent(BaseAgent):
         final_price = deal_rounds[-1]["price"]
         previous_price = deal_rounds[-2]["price"]
         
-        if final_price - previous_price <= 10:
+        if abs(final_price - previous_price) <= 10:
             return (final_price + previous_price) / 2
         else:
             return "No deal."
