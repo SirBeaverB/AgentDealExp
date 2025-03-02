@@ -92,7 +92,7 @@ class DealAgent(BaseAgent):
             round_results = []
             buyer_price = None
             seller_price = None
-            for role_info in enhanced_roles:
+            for role_info in reversed(enhanced_roles):
                 if round_num == 0:
                     role = role_info["description"]
                 else:

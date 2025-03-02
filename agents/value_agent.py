@@ -34,7 +34,7 @@ class ValuerAgent(BaseAgent):
 
         format = f"""
         Answer format:
-        - Expected price: $[price]
+        - Expected price: [price] (No $, no commas in the price. For example, 1000, not $1,000.)
         - Reason: [reason]
         - Confidence level: [confidence]
 
