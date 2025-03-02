@@ -7,30 +7,30 @@ class DealAgent(BaseAgent):
     def __init__(self, config: Dict[str, Any], i: int):
         super().__init__(config)
         self.i = i
-        self.max_rounds = 5
+        self.max_rounds = 8
         self.roles = [
             {
             "name": "Buyer",
             "description": f"""You are a buyer of a data product. You are about to enter a negotiation.
             Your goal is to get the lowest price possible for the data product.
-            When making an offer, always start by stating your price.
+            When making an offer, always start by stating your price. Do not mention other numbers.
+            Do not reapeat the price offered by the seller unless you agree with it.
             You are truly willing to reach a deal before the dealing rounds end.
             Here are some strategies to consider:
             - Start with a lower price than your expected value to leave room for negotiation.
             - Be prepared to adjust your price based on the seller's counteroffers.
-            - Do not say any number other than your price.
             """
             },
             {
             "name": "Seller",
             "description": f"""You are a seller of a data product. You are about to enter a negotiation.
             Your goal is to get the highest price possible for the data product.
-            When making an offer, always start by stating your price.
+            When making an offer, always start by stating your price. Do not mention other numbers.
+            Do not reapeat the price offered by the buyer unless you agree with it.
             You are truly willing to reach a deal before the dealing rounds end.
             Here are some strategies to consider:
             - Start with a higher price than your expected value to leave room for negotiation.
             - Be prepared to adjust your price based on the buyer's counteroffers.
-            - Do not say any number other than your price.
             """
             }
         ]
@@ -99,7 +99,9 @@ class DealAgent(BaseAgent):
                     role = f"""
                     You are the {role_info['name']} in this deal.
                     Continue focusing on your domain.
-                    You may change your price freely this round.
+                    You may change your price freely this round. 
+                    State your price first while speaking by saying "I offer [price]."
+                    Do not repeat the price offered by the other party, unless you agree with it.
                     """
                 perspective_name = role_info["name"]
                 additional_content = f"""
@@ -112,7 +114,9 @@ class DealAgent(BaseAgent):
                 {self.format_deal_rounds(deal_rounds)}
                 You can get the offered price from the other party last round from your short-term memory.
                 Instructions:
-                - Provide a price for the data product.
+                - Provide a price for the data product. State your price by saying "I offer [price]. [Your reasoning]." 
+                - No commas in the price. For example, 1000, not 1,000.
+                - Consider accepting the offer if the other party’s price is no more than 100 $ different from yours.
                 - You can change your price from last round.
                 - If you agree with the other party's price, you can accept it by repeating the accepted price first.
                 - Keep it concise and deal-like. Use adjective-rich language and convey your confidence, which was offered to you previously.
@@ -133,9 +137,11 @@ class DealAgent(BaseAgent):
                 elif perspective_name == "Seller":
                     seller_price = price
 
+                self.memory_summarizer.add_to_short_term_memory(self.short_term_memory, response)
+
             deal_rounds.extend(round_results)
 
-            if buyer_price is not None and seller_price is not None and buyer_price == seller_price:
+            if buyer_price is not None and seller_price is not None and abs(buyer_price - seller_price) <= 10:
                 break
 
             last_round_num = round_results[-1]['round']
@@ -154,7 +160,7 @@ class DealAgent(BaseAgent):
         '''
         # Extract the price from the response.
         # The price should be the first number found in the response.
-        match = re.search(r'\d+(\.\d+)?', response)
+        match = re.search(r'\d{1,3}(?:,\d{3})*(?:\.\d+)?', response)
         if match:
             return float(match.group(0))
         else:
@@ -172,8 +178,8 @@ class DealAgent(BaseAgent):
         final_price = deal_rounds[-1]["price"]
         previous_price = deal_rounds[-2]["price"]
         
-        if final_price == previous_price:
-            return final_price
+        if final_price - previous_price <= 10:
+            return (final_price + previous_price) / 2
         else:
             return "No deal."
         
@@ -228,5 +234,5 @@ def survey(self):
         """
         response = self._create_prompt(role_info["description"], additional_content)
         with open(f"survey_result\{self.i}_survey_response_{perspective_name}.txt", "w", encoding="utf-8") as file:
-            file.write(f"Survey response from {perspective_name}:")
+            file.write(f"Survey response from {perspective_name}:\n")
             file.write(response)

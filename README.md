@@ -6,25 +6,31 @@ Beaver:
 
 基本结构已经完成，后续可根据需要进行修改。
 
-_prompt 需要完善!!_
 
-代码中有很多冗余部分，之后会逐步删除。
-
-目前执行一次实验大约需要 1 分钟。
+目前执行一次实验大约需要 40-50 s。
 
 多次运行后发现这个 agent 确实很蠢。
 
+`prompt_factory` 感觉还是没必要且不方便，不做了。
+
 ## TODO：
 
-检查当前轮次的前手发言是否已加入 memory。没有！开始修改！
+1. 完善prompt
+   
+   (1) agent prompt 
+   (2) instruction
+   (3) survey
+2. 明确历史记录部分如何设置
+3. 明确市场因素具体类别
+4. 修剪config中的冗余
+5. 加更多api选择
 
-历史记录部分修改
-
-`prompt_factory` 感觉还是没必要且不方便，不做了。
+## 问题：
+经常无法成交。已经把判定放宽为差值10以内都认为成交。
 
 ## Structure：
 
-![alt text](image-1.png)
+![alt text](figure/agent_structure.png)
 
 ⑦ 在代码中未实现。
 
