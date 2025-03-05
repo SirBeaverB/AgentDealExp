@@ -11,12 +11,14 @@ import random
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # variables
-model_performance_improvement = [0.2, 0.25, 0.3, 0.4]  
-capacity = ["small", "medium", "large"]
-data_entrophy = ["low", "medium", "high"]
+model_performance_improvement = [0.2, 0.25, 0.3]  
+#capacity = ["small", "medium", "large"]
+capacity = ["NULL"]
+#data_entrophy = ["low", "medium", "high"]
+data_entrophy = ["NULL"]
 data_life = ["short", "medium", "long"]
-# history
-market = [0.3, 0.4, 0.5, 0.6, 0.7]
+#history
+market = [0.3, 0.4, 0.5]
 
 # 4*3*3*3*5*2*2*2*2*2*2 = 34560
 
@@ -41,13 +43,14 @@ for s_mpi in model_performance_improvement:
             for s_dl in data_life:
                 for s_mark in market:
                     for b_mpi in ["NULL", s_mpi]:
-                        for b_cap in ["NULL", s_cap]:
-                            for b_de in ["NULL", s_de]:
+                        for b_cap in ["NULL"]:#]:
+                            for b_de in ["NULL"]:#, s_de]:
                                 for b_dl in ["NULL", s_dl]:
                                     for b_mark in ["NULL", s_mark]:
-                                        s_hist = random_history_list()
-                                        for b_hist in ["NULL", s_hist]:
+                                        s_hist = ["NULL"]#random_history_list()
+                                        for b_hist in ["NULL"]:#, s_hist]:
                                             i += 1
+                                            print(i)
                                             argu = {
                                                 "model_performance_improvement": (s_mpi, b_mpi),
                                                 "capacity": (s_cap, b_cap),
@@ -90,14 +93,14 @@ for s_mpi in model_performance_improvement:
                                             #break
                                         #break
                                     #break
-                                break
-                            break
-                        break
-                    break
-                break
-            break
-        break
-    break
+                                #break
+                            #break
+                        #break
+                    #break
+                #break
+            #break
+        #break
+    #break
 end_time = time.time()
 print(f"Time taken: {end_time-start_time}")
 print("————————————————————————All experiments completed————————————————————————")

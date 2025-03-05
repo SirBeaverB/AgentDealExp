@@ -60,5 +60,6 @@ class ValuerAgent(BaseAgent):
                 reason = line.split(":")[1].strip()
             elif line.startswith("- Confidence level:"):
                 confidence = line.split(":")[1].strip()
+                #print({"price": price, "reason": reason, "confidence": confidence})
         return {"price": price, "reason": reason, "confidence": confidence}
 

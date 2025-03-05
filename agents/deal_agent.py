@@ -226,11 +226,28 @@ def survey(self):
         Here is a brief summary of the dealing process:
         {self._get_mid_term_info()}
         Now, please answer the following survey question based on your experience in the deal, answer as briefly as possible:
-        - On a scale of 1 to 10, how fair was the final price in your opinion?
-        - On a scale of 1 to 10, how confident are you during the dealing process?
+        Survey on Data Transaction Perceptions
+Please rate the following statements based on the scale below:
+1 – Strongly Disagree
+2 – Disagree
+3 – Neutral
+4 – Agree
+5 – Strongly Agree
+(a) The procedures followed in data transactions are fair and unbiased.
+(b) The revenue and returns my company receives from data transactions are fair relative to our investment.
+(c) I am able to fully express my views and attitudes during the data transaction process.
+(d) My offers and demands are fully considered during the negotiation process.
+(e) I have an influence on the final determination of the data price.
+(f) I accurately received transaction-related information during the data transaction process.
+(g) The transaction procedures upheld ethical and moral standards.
+(h) The final data price reflects the effort I put into the negotiation process.
+(i) The final data price aligns with the work I put into the negotiation.
+(j) The counterpart treated me politely during the negotiation process.
+(k) The counterpart was honest during the negotiation process.
+(l) The counterpart communicated transaction details with me in a timely manner during the process.
         please give your answer strictly in this format:
-        1. [your answer]
-        2. [your answer]
+        1. [your answer(a number)]
+        2. [your answer(a number)]
         """
         response = self._create_prompt(role_info["description"], additional_content)
         with open(f"survey_result\{self.i}_survey_response_{perspective_name}.txt", "w", encoding="utf-8") as file:

@@ -1,4 +1,4 @@
 Arguments:
-{'model_performance_improvement': (0.2, 'NULL'), 'capacity': ('small', 'NULL'), 'data_entrophy': ('low', 'NULL'), 'data_life': ('short', 'NULL'), 'history': ([1000, 5800, 9100, 2500, 4900], 'NULL'), 'market': (0.3, 0.3)}
-1. 1750.0
-2. Yes, the deal appears to be fair as both the seller and buyer reached a consensus at the final price of 1750, which reflects a compromise between their initial offers and acknowledges the unique value of the data product.
+{'model_performance_improvement': (0.2, 'NULL'), 'capacity': ('NULL', 'NULL'), 'data_entrophy': ('NULL', 'NULL'), 'data_life': ('short', 'short'), 'history': (['NULL'], 'NULL'), 'market': (0.3, 'NULL')}
+1. 6600.0
+2. Yes, the deal appears to be fair as both parties have made offers that reflect the data product's potential and limitations, ultimately reaching a final price that aligns with their assessments.
