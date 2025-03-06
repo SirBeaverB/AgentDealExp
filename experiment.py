@@ -50,6 +50,8 @@ for s_mpi in model_performance_improvement:
                                         s_hist = ["NULL"]#random_history_list()
                                         for b_hist in ["NULL"]:#, s_hist]:
                                             i += 1
+                                            if i < 210:
+                                                continue
                                             print(i)
                                             argu = {
                                                 "model_performance_improvement": (s_mpi, b_mpi),

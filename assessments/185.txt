@@ -1,0 +1,4 @@
+Arguments:
+{'model_performance_improvement': (0.3, 'NULL'), 'capacity': ('NULL', 'NULL'), 'data_entrophy': ('NULL', 'NULL'), 'data_life': ('medium', 'NULL'), 'history': (['NULL'], 'NULL'), 'market': (0.5, 'NULL')}
+1. 6000.0
+2. Yes, the deal seems fair as both parties reached an agreement at the final price of 6000, which both the seller and buyer justified based on the market demand and potential value of the data product.
