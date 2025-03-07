@@ -35,15 +35,15 @@ class MemorySummaryAgent(BaseAgent):
         combined_text = " ".join(t.strip() for t in texts)
         role = "You are a highly concise summarizer."
         content = f"""
-        Below are several analysts' statements:
+        Below are the bargaining process of a buyer and/or a seller:
         {combined_text}
 
         {context}
 
-        Please summarize the above arguments into one or two concise sentences
+        Please summarize the above statements into one or two concise sentences
         that capture the main essence of their content.
         Keep it very brief and to the point.
-        Don't omit the offered price.
+        Don't omit the offered price and the name of the player who made the offer.
         """
 
         summary = self._create_prompt(role, content)

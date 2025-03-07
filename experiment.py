@@ -50,7 +50,7 @@ for s_mpi in model_performance_improvement:
                                         s_hist = ["NULL"]#random_history_list()
                                         for b_hist in ["NULL"]:#, s_hist]:
                                             i += 1
-                                            if i < 210:
+                                            if i < 0 or i > 8:
                                                 continue
                                             print(i)
                                             argu = {
@@ -92,17 +92,6 @@ for s_mpi in model_performance_improvement:
                                                 file.write("Dealing Process:\n")
                                                 file.write(log_2)
                                             print(f"Experiment {i} completed")
-                                            #break
-                                        #break
-                                    #break
-                                #break
-                            #break
-                        #break
-                    #break
-                #break
-            #break
-        #break
-    #break
 end_time = time.time()
 print(f"Time taken: {end_time-start_time}")
 print("————————————————————————All experiments completed————————————————————————")

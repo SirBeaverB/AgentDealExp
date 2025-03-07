@@ -19,6 +19,7 @@ class DealAgent(BaseAgent):
             Here are some strategies to consider:
             - Start with a lower price than your expected value.
             - Be prepared to adjust your price based on the seller's counteroffers.
+            - If the seller offer a lower price than your expected value, do not raise the bargain.
             """
             },
             {
@@ -31,6 +32,7 @@ class DealAgent(BaseAgent):
             Here are some strategies to consider:
             - Start with a higher price than your expected value.
             - Be prepared to adjust your price based on the buyer's counteroffers.
+            - If the buyer offer a higher price than your expected value, do not lower the bargain.
             """
             }
         ]
@@ -108,10 +110,12 @@ class DealAgent(BaseAgent):
                 Round {round_num + 1} of deal ({perspective_name.upper()}):
                 Mid-term Memory (accumulated):
                 {self._get_mid_term_info()}
-                Short-term Memory (last round only):
+                Short-term Memory (recent):
                 {self._get_short_term_info()}
-                Previous Prices:
+                Prices from previous rounds:
                 {self.format_deal_rounds(deal_rounds)}
+                Here is the result of the current round:
+                {round_results}
                 You can get the offered price from the other party last round from your short-term memory.
                 Instructions:
                 - Provide a price for the data product. State your price by saying "I offer [price]. [Your reasoning]." 
@@ -122,6 +126,11 @@ class DealAgent(BaseAgent):
                 - Keep it concise and deal-like. Be specific and use adjective-rich language and convey your confidence, which was offered to you previously.
                 - Remember that you have {self.max_rounds - round_num} rounds left.
                 """
+                if perspective_name == "Buyer":
+                    additional_content += f"""
+                    {self.short_term_memory}
+                    Do not offer a price higher than this!!
+                    """
 
                 response = self._create_prompt(role, additional_content)
                 price = self.get_price(response)
@@ -136,8 +145,7 @@ class DealAgent(BaseAgent):
                     buyer_price = price
                 elif perspective_name == "Seller":
                     seller_price = price
-
-                self.memory_summarizer.add_to_short_term_memory(self.short_term_memory, response)
+                    self.memory_summarizer.add_to_short_term_memory(self.short_term_memory, f"The seller's offer this round is: {response}")
 
             deal_rounds.extend(round_results)
 
@@ -148,7 +156,7 @@ class DealAgent(BaseAgent):
             this_round_data = [r['log'] for r in round_results if r['round'] == last_round_num]
             round_summary = self.memory_summarizer.summarize_speeches(this_round_data)
             self.short_term_memory.clear()
-            self.memory_summarizer.add_to_short_term_memory(self.short_term_memory, round_summary)
+            #self.memory_summarizer.add_to_short_term_memory(self.short_term_memory, round_summary)
             self.memory_summarizer.add_to_mid_term_memory(self.mid_term_memory, round_summary)
         survey(self)
         return deal_rounds
@@ -214,7 +222,8 @@ class DealAgent(BaseAgent):
     def _get_short_term_info(self) -> str:
         if not self.short_term_memory:
             return "No short-term memory recorded."
-        return self.short_term_memory[-1]
+        print(self.short_term_memory)
+        return self.short_term_memory
 
 
 def survey(self):
@@ -233,18 +242,18 @@ Please rate the following statements based on the scale below:
 3 – Neutral
 4 – Agree
 5 – Strongly Agree
-(a) The procedures followed in data transactions are fair and unbiased.
-(b) The revenue and returns my company receives from data transactions are fair relative to our investment.
-(c) I am able to fully express my views and attitudes during the data transaction process.
-(d) My offers and demands are fully considered during the negotiation process.
-(e) I have an influence on the final determination of the data price.
-(f) I accurately received transaction-related information during the data transaction process.
-(g) The transaction procedures upheld ethical and moral standards.
-(h) The final data price reflects the effort I put into the negotiation process.
-(i) The final data price aligns with the work I put into the negotiation.
-(j) The counterpart treated me politely during the negotiation process.
-(k) The counterpart was honest during the negotiation process.
-(l) The counterpart communicated transaction details with me in a timely manner during the process.
+(1) The procedures followed in data transactions are fair and unbiased.
+(2) The revenue and returns my company receives from data transactions are fair relative to our investment.
+(3) I am able to fully express my views and attitudes during the data transaction process.
+(4) My offers and demands are fully considered during the negotiation process.
+(5) I have an influence on the final determination of the data price.
+(6) I accurately received transaction-related information during the data transaction process.
+(7) The transaction procedures upheld ethical and moral standards.
+(8) The final data price reflects the effort I put into the negotiation process.
+(9) The final data price aligns with the work I put into the negotiation.
+(10) The counterpart treated me politely during the negotiation process.
+(11) The counterpart was honest during the negotiation process.
+(12) The counterpart communicated transaction details with me in a timely manner during the process.
         please give your answer strictly in this format:
         1. [your answer(a number)]
         2. [your answer(a number)]
