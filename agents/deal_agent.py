@@ -222,7 +222,6 @@ class DealAgent(BaseAgent):
     def _get_short_term_info(self) -> str:
         if not self.short_term_memory:
             return "No short-term memory recorded."
-        print(self.short_term_memory)
         return self.short_term_memory
 
 
@@ -242,6 +241,7 @@ Please rate the following statements based on the scale below:
 3 – Neutral
 4 – Agree
 5 – Strongly Agree
+Statements:
 (1) The procedures followed in data transactions are fair and unbiased.
 (2) The revenue and returns my company receives from data transactions are fair relative to our investment.
 (3) I am able to fully express my views and attitudes during the data transaction process.
