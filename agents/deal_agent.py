@@ -7,7 +7,7 @@ class DealAgent(BaseAgent):
     def __init__(self, config: Dict[str, Any], i: int):
         super().__init__(config)
         self.i = i
-        self.max_rounds = 8
+        self.max_rounds = 10
         self.roles = [
             {
             "name": "Buyer",
@@ -108,14 +108,12 @@ class DealAgent(BaseAgent):
                 perspective_name = role_info["name"]
                 additional_content = f"""
                 Round {round_num + 1} of deal ({perspective_name.upper()}):
-                Mid-term Memory (accumulated):
-                {self._get_mid_term_info()}
-                Short-term Memory (recent):
-                {self._get_short_term_info()}
                 Prices from previous rounds:
                 {self.format_deal_rounds(deal_rounds)}
                 Here is the result of the current round:
                 {round_results}
+                Here is some summary from previous rounds:
+                {self._get_mid_term_info()}
                 You can get the offered price from the other party last round from your short-term memory.
                 Instructions:
                 - Provide a price for the data product. State your price by saying "I offer [price]. [Your reasoning]." 
@@ -126,12 +124,15 @@ class DealAgent(BaseAgent):
                 - Keep it concise and deal-like. Be specific and use adjective-rich language and convey your confidence, which was offered to you previously.
                 - Remember that you have {self.max_rounds - round_num} rounds left.
                 """
+                # Mid-term Memory (accumulated):
+                #{self._get_mid_term_info()}
+                #Short-term Memory (recent):
+                #{self._get_short_term_info()}
                 if perspective_name == "Buyer":
                     additional_content += f"""
                     {self.short_term_memory}
-                    Do not offer a price higher than this!!
+                    DO NOT offer a price higher than {self.get_price(self.short_term_memory[-1])}!! For example, if the buyer offered 1800 this round, you may offer 1700 or 1600, but not 1900 or 2000.
                     """
-
                 response = self._create_prompt(role, additional_content)
                 price = self.get_price(response)
                 round_results.append({
@@ -149,8 +150,11 @@ class DealAgent(BaseAgent):
 
             deal_rounds.extend(round_results)
 
-            if buyer_price is not None and seller_price is not None and abs(buyer_price - seller_price) <= 10:
-                break
+            if buyer_price is not None and seller_price is not None and abs(buyer_price - seller_price) <= 50:
+                if round_num > 6:
+                    break
+                elif abs(buyer_price - seller_price) <= 20:
+                    break
 
             last_round_num = round_results[-1]['round']
             this_round_data = [r['log'] for r in round_results if r['round'] == last_round_num]
@@ -186,7 +190,7 @@ class DealAgent(BaseAgent):
         final_price = deal_rounds[-1]["price"]
         previous_price = deal_rounds[-2]["price"]
         
-        if abs(final_price - previous_price) <= 10:
+        if abs(final_price - previous_price) <= 50:
             return (final_price + previous_price) / 2
         else:
             return "No deal."

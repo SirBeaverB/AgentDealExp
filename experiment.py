@@ -13,9 +13,9 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # variables
 model_performance_improvement = [0.2, 0.25, 0.3]  
 #capacity = ["small", "medium", "large"]
-capacity = ["NULL"]
+capacity = ["enough"]
 #data_entrophy = ["low", "medium", "high"]
-data_entrophy = ["NULL"]
+data_entrophy = ["low", "medium", "high"]
 data_life = ["short", "medium", "long"]
 #history
 market = [0.3, 0.4, 0.5]
@@ -43,14 +43,14 @@ for s_mpi in model_performance_improvement:
             for s_dl in data_life:
                 for s_mark in market:
                     for b_mpi in ["NULL", s_mpi]:
-                        for b_cap in ["NULL"]:#]:
-                            for b_de in ["NULL"]:#, s_de]:
+                        for b_cap in ["enough"]:#]:
+                            for b_de in ["NULL", s_de]:
                                 for b_dl in ["NULL", s_dl]:
                                     for b_mark in ["NULL", s_mark]:
                                         s_hist = ["NULL"]#random_history_list()
                                         for b_hist in ["NULL"]:#, s_hist]:
                                             i += 1
-                                            if i < 0 or i > 8:
+                                            if i < 777 or i > 10000:
                                                 continue
                                             print(i)
                                             argu = {
@@ -73,13 +73,13 @@ for s_mpi in model_performance_improvement:
                                             log_2 = deal["log"]
                                             print(f"{i}: Deal Agent completed")
 
-                                            assessor = AssessorAgent(AGENT_SETTINGS["assess_agent"], deal)
+                                            """assessor = AssessorAgent(AGENT_SETTINGS["assess_agent"], deal)
                                             log_3 = assessor.analyze()
                                             with open(f"assessments\{i}.txt", "w") as file:
                                                 file.write("Arguments:\n")
                                                 file.write(str(argu)+"\n")
                                                 file.write(log_3)
-                                            print(f"{i}: Assessor Agent completed")
+                                            print(f"{i}: Assessor Agent completed")"""
 
                                             with open(f"log\{i}.txt", "w") as file:
                                                 file.write("Arguments:\n")
