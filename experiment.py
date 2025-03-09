@@ -20,7 +20,7 @@ data_life = ["short", "medium", "long"]
 #history
 market = [0.3, 0.4, 0.5]
 
-# 4*3*3*3*5*2*2*2*2*2*2 = 34560
+# 3*1*3*3*3*2*2*2*2 = 1296
 
 
 
@@ -50,7 +50,7 @@ for s_mpi in model_performance_improvement:
                                         s_hist = ["NULL"]#random_history_list()
                                         for b_hist in ["NULL"]:#, s_hist]:
                                             i += 1
-                                            if i < 777 or i > 10000:
+                                            if i < 1 or i > 10000:
                                                 continue
                                             print(i)
                                             argu = {
